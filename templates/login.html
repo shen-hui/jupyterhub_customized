@@ -1,0 +1,140 @@
+{% extends "page.html" %}
+{% if announcement_login %}
+  {% set announcement = announcement_login %}
+{% endif %}
+
+{% block login_widget %}
+{% endblock %}
+
+{% block main %}
+
+{% block login %}
+<div class="am-g am-g-collapse">
+    <div class="am-u-sm-12 am-u-md-12 am-u-lg-4">
+        <div class="am-g am-u-sm-10 am-u-md-10 am-u-lg-8 am-u-sm-centered">
+            {% if custom_html %}
+            {{ custom_html | safe }}
+            {% elif login_service %}
+            <div class="service-login">
+                <a role="button" class='btn btn-jupyter btn-lg' href='{{authenticator_login_url}}'>
+                    使用 {{login_service}}登录
+                </a>
+            </div>
+            {% else %}
+            <form class="am-form" action="{{login_url}}?next={{next}}" method="post" role="form">
+                <div class='auth-form-body am-u-sm-10 am-u-md-10 am-u-lg-8 am-u-sm-centered'>
+                    <div class="am-g login-title am-text-center">
+                        <img
+                                src="/static/images/logo-64X64.png"
+                                width="35px"
+                                alt="LOGO"
+                        />
+                        人工智能实训平台
+                    </div>
+                    {% if login_error %}
+                    <p class="am-text-warning am-text-center">
+                        {{login_error}}
+                    </p>
+                    {% endif %}
+                    <div class="am-form-group am-form-icon am-form-feedback">
+                        <label class="am-form-label am-text-primary am-text-lg" for="username_input">用户名</label>
+                        <span class="am-icon-user am-text-primary am-icon-fw"></span>
+                        <input
+                                id="username_input"
+                                type="text"
+                                autocapitalize="off"
+                                autocorrect="off"
+                                class="am-form-field am-input-lg"
+                                name="username"
+                                val="{{username}}"
+                                tabindex="1"
+                                autofocus="autofocus"
+                        />
+                    </div>
+                    <div class="am-form-group am-form-icon am-form-feedback">
+                        <label class="am-form-label am-text-primary am-text-lg" for="password_input">密码</label>
+                        <span class="am-icon-lock am-text-primary am-icon-fw"></span>
+                        <input
+                                type="password"
+                                class="am-form-field am-input-lg"
+                                name="password"
+                                id="password_input"
+                                tabindex="2"
+                        />
+                    </div>
+<!--                    <label class="am-u-sm-8 am-text-left"  for="password_input">用户名:</label>-->
+<!--                    <div class="am-u-sm-8 am-u-sm-centered">-->
+<!--                        <input-->
+<!--                                type="password"-->
+<!--                                class="form-control"-->
+<!--                                name="password"-->
+<!--                                id="password_input"-->
+<!--                                tabindex="2"-->
+<!--                        />-->
+<!--                    </div>-->
+<!--                    <label class="am-u-sm-8" for='password_input'>密码:</label>-->
+<!--                    <div class="am-u-sm-8 am-u-sm-centered">-->
+<!--                        <input-->
+<!--                                type="password"-->
+<!--                                class="form-control"-->
+<!--                                name="password"-->
+<!--                                id="password_input"-->
+<!--                                tabindex="2"-->
+<!--                        />-->
+<!--                    </div>-->
+                    <button  id="login_submit" type="submit" class="am-margin-top-xl am-btn am-btn-primary am-btn-block">登录</button>
+<!--                    <div class="feedback-container">-->
+<!--                        <input-->
+<!--                                id="login_submit"-->
+<!--                                type="submit"-->
+<!--                                class='btn btn-jupyter'-->
+<!--                                value='登录'-->
+<!--                                tabindex="3"-->
+<!--                        />-->
+<!--                        <div class="feedback-widget hidden">-->
+<!--                            <i class="fa fa-spinner"></i>-->
+<!--                        </div>-->
+<!--                    </div>-->
+                </div>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="am-u-lg-8 am-show-lg-only">
+        <div class="login-right am-padding-left-xl">
+            <img
+                    src="/static/images/logo-64X64.png"
+                    width="50"
+                    alt="LOGO"
+                    class="q-mb-md"
+            >
+            <div class="header">
+                上海仪电人工智能创新院有限公司
+            </div>
+            <div class="sub-title">
+                开启人工智能之旅...
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock login %}
+
+{% endblock %}
+
+{% block script %}
+{{ super() }}
+<script>
+if (window.location.protocol === "http:") {
+  // unhide http warning
+  var warning = document.getElementById('insecure-login-warning');
+  warning.className = warning.className.replace(/\bhidden\b/, '');
+}
+// setup onSubmit feedback
+$('form').submit((e) => {
+  var form = $(e.target);
+  form.find('.feedback-container>input').attr('disabled', true);
+  form.find('.feedback-container>*').toggleClass('hidden');
+  form.find('.feedback-widget>*').toggleClass('fa-pulse');
+});
+</script>
+{% endblock %}
